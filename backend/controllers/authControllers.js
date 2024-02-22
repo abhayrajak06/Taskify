@@ -30,14 +30,13 @@ export const loginController = async (req, res) => {
     const token = JWT.sign(
       {
         _id: user?._id,
-        name: user?.name,
-        email: user?.email,
       },
       process.env.SECRET,
       { expiresIn: "7d" }
     );
-    const { password, ...info } = user?._doc;
-    res.status(200).json(token);
+    res
+      .status(200)
+      .json({ token, _id: user._id, name: user.name, email: user.email });
   } catch (error) {
     console.log(error);
   }

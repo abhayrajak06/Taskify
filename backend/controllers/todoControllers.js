@@ -12,7 +12,9 @@ export const createTodoController = async (req, res) => {
 
 export const readTodoController = async (req, res) => {
   try {
-    const todos = await todoModel.find({ user: req.params.uId });
+    const todos = await todoModel
+      .find({ user: req.params.uId })
+      .sort({ createdAt: -1 });
     res.status(200).json(todos);
   } catch (error) {
     console.log(error);

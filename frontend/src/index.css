@@ -78,3 +78,42 @@ button:focus-visible {
 .active{
   border-bottom: 2px solid black;
 }
+
+.footer{
+  background-color: rgb(57, 56, 56) !important;
+}
+
+@media screen and (max-width: 310px) {
+  .footer p{
+    font-size: 0.86rem;
+  }
+  .footer h4{
+    font-size: 1rem;
+  }
+}
+
+
+.footer a{
+  text-decoration: none;
+  color: white;
+  padding: 0.6rem;
+}
+
+.footer a:hover{
+  color: #ffefba;
+  border-bottom: 2px solid #ffefba;
+}
+
+.card-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
