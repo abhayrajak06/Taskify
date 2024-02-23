@@ -7,12 +7,14 @@ import { url } from "../utils/url";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Loader from "../components/Loader";
 
 const UpdateTask = () => {
   const [auth] = useAuth();
   const navigate = useNavigate();
   const { tId } = useParams();
   const user = localStorage.getItem("auth");
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -31,6 +33,7 @@ const UpdateTask = () => {
 
   const getTaskData = async () => {
     try {
+      setLoader(true);
       const res = await axios.get(`${url}/api/v1/todo/get-todo/${tId}`, {
         headers: {
           Authorization: auth?.token,
@@ -39,8 +42,10 @@ const UpdateTask = () => {
       if (res?.data) {
         setTask(res.data);
       }
+      setLoader(false);
     } catch (error) {
       console.log(error);
+      setLoader(false);
     }
   };
 
@@ -58,6 +63,7 @@ const UpdateTask = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoader(true);
       const { title, description, dueDate, category, priority, status } = task;
       const updatedTask = {
         title,
@@ -82,133 +88,143 @@ const UpdateTask = () => {
         toast.success("Task updated");
         navigate("/all-tasks");
       }
+      setLoader(false);
     } catch (error) {
       console.log(error);
+      setLoader(false);
     }
   };
 
   return (
     <div className="">
       <Navbar />
-      <div className="container-fluid" style={{ minHeight: "65vh" }}>
-        <div className="row">
-          <div
-            className="col-md-12"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <form
-              onSubmit={handleSubmit}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-                minWidth: "18rem",
-                padding: "1rem",
-                margin: "1rem 0",
-                borderRadius: "0.5rem",
-                backgroundColor: "#FBF6EE",
-                boxShadow:
-                  "rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
-              }}
+      {loader ? (
+        <Loader />
+      ) : (
+        <div className="container-fluid" style={{ minHeight: "65vh" }}>
+          <div className="row">
+            <div
+              className="col-md-12"
+              style={{ display: "flex", justifyContent: "center" }}
             >
-              <h2 className="text-center mb-2">Update Task</h2>
-              <div className="mb-3">
-                <label htmlFor="exampleInputTitle" className="form-label">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter title"
-                  required
-                  name="title"
-                  value={task.title}
-                  onChange={handleChange}
-                  className="form-control"
-                  id="exampleInputTitle"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="exampleInputDescription" className="form-label">
-                  Description
-                </label>
-                <textarea
-                  style={{ minHeight: "10rem" }}
-                  type="text"
-                  placeholder="Enter description"
-                  required
-                  name="description"
-                  value={task.description}
-                  onChange={handleChange}
-                  className="form-control"
-                  id="exampleInputDescription"
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="exampleInputdueDate" className="form-label">
-                  Due Date
-                </label>
-                <input
-                  type="date"
-                  name="dueDate"
-                  value={task.dueDate}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div
-                className="mb-3"
-                style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}
+              <form
+                onSubmit={handleSubmit}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  minWidth: "18rem",
+                  padding: "1rem",
+                  margin: "1rem 0",
+                  borderRadius: "0.5rem",
+                  backgroundColor: "#FBF6EE",
+                  boxShadow:
+                    "rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px",
+                }}
               >
-                <label>
-                  Category:
-                  <select
-                    value={task.category}
-                    name="category"
+                <h2 className="text-center mb-2">Update Task</h2>
+                <div className="mb-3">
+                  <label htmlFor="exampleInputTitle" className="form-label">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter title"
+                    required
+                    name="title"
+                    value={task.title}
+                    onChange={handleChange}
+                    className="form-control"
+                    id="exampleInputTitle"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleInputDescription"
+                    className="form-label"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    style={{ minHeight: "10rem" }}
+                    type="text"
+                    placeholder="Enter description"
+                    required
+                    name="description"
+                    value={task.description}
+                    onChange={handleChange}
+                    className="form-control"
+                    id="exampleInputDescription"
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="exampleInputdueDate" className="form-label">
+                    Due Date
+                  </label>
+                  <input
+                    type="date"
+                    name="dueDate"
+                    value={task.dueDate}
                     onChange={handleChange}
                     required
-                  >
-                    {catList?.map((cat) => (
-                      <option key={cat.id} value={cat.name}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  Priority:
-                  <select
-                    value={task.priority}
-                    name="priority"
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                  </select>
-                </label>
-                <label>
-                  Status:
-                  <select
-                    value={task.status}
-                    name="status"
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="In_progress">In-progress</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Completed">Completed</option>
-                  </select>
-                </label>
-              </div>
-              <button type="submit" className="btn btn-primary w-100">
-                Update
-              </button>
-            </form>
+                  />
+                </div>
+                <div
+                  className="mb-3"
+                  style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}
+                >
+                  <label>
+                    Category:
+                    <select
+                      value={task.category}
+                      name="category"
+                      onChange={handleChange}
+                      required
+                    >
+                      {catList?.map((cat) => (
+                        <option key={cat.id} value={cat.name}>
+                          {cat.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Priority:
+                    <select
+                      value={task.priority}
+                      name="priority"
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>
+                    </select>
+                  </label>
+                  <label>
+                    Status:
+                    <select
+                      value={task.status}
+                      name="status"
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="In_progress">In-progress</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </label>
+                </div>
+                <button type="submit" className="btn btn-primary w-100">
+                  Update
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
       <Footer />
     </div>
   );

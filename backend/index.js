@@ -7,12 +7,13 @@ import todoRoutes from "./routes/todoRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
-app.use(
-  cors({
-    origin: "https://taskify-abhay.vercel.app",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "https://taskify-abhay.vercel.app",
+//     credentials: true,
+//   })
+// );
+app.use(cors());
 
 //config env
 dotenv.config();
