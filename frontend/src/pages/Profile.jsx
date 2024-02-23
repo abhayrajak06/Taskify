@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/Auth";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -12,6 +13,12 @@ const Profile = () => {
   const [email, setEmail] = useState("");
   const user = JSON.parse(localStorage.getItem("auth"));
   const [auth, setAuth] = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, []);
 
   const getUserInfo = async () => {
     try {

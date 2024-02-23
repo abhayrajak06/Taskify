@@ -16,7 +16,7 @@ const UpdateTask = () => {
 
   useEffect(() => {
     if (!user) {
-      // navigate("/login");
+      navigate("/login");
     }
   }, []);
 

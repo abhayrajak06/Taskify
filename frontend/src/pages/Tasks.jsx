@@ -18,7 +18,7 @@ const Tasks = () => {
 
   useEffect(() => {
     if (!user) {
-      // navigate("/login");
+      navigate("/login");
     } else {
       getAllTasks();
     }
