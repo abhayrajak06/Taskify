@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { url } from "../utils/url";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/Auth";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const Login = () => {
   const [userDetails, setUserDetails] = useState({
@@ -39,69 +41,73 @@ const Login = () => {
   };
 
   return (
-    <div
-      className="d-flex align-items-center justify-content-center"
-      style={{ minHeight: "70vh" }}
-    >
+    <div className="">
+      <Navbar />
       <div
-        className=""
-        style={{
-          backgroundColor: "#1F2544",
-          padding: "1.6rem",
-          borderRadius: "1rem",
-        }}
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "70vh" }}
       >
-        <h2 className="text-center mb-2" style={{ color: "whitesmoke" }}>
-          Login
-        </h2>
-        <form onSubmit={handleLogin} className="">
-          <div className="mb-3">
-            <label
-              htmlFor="exampleInputEmail1"
-              className="form-label"
-              style={{ color: "whitesmoke" }}
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={userDetails.email}
-              onChange={handleChange}
-              className="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label
-              htmlFor="exampleInputPassword1"
-              className="form-label"
-              style={{ color: "whitesmoke" }}
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={userDetails.password}
-              onChange={handleChange}
-              className="form-control"
-              id="exampleInputPassword1"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-primary w-100">
+        <div
+          className=""
+          style={{
+            backgroundColor: "#1F2544",
+            padding: "1.6rem",
+            borderRadius: "1rem",
+          }}
+        >
+          <h2 className="text-center mb-2" style={{ color: "whitesmoke" }}>
             Login
-          </button>
-          <h6 className="mt-2" style={{ color: "whitesmoke" }}>
-            Don't have any account yet? <Link to={"/register"}>Register</Link>
-          </h6>
-        </form>
+          </h2>
+          <form onSubmit={handleLogin} className="">
+            <div className="mb-3">
+              <label
+                htmlFor="exampleInputEmail1"
+                className="form-label"
+                style={{ color: "whitesmoke" }}
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={userDetails.email}
+                onChange={handleChange}
+                className="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label
+                htmlFor="exampleInputPassword1"
+                className="form-label"
+                style={{ color: "whitesmoke" }}
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={userDetails.password}
+                onChange={handleChange}
+                className="form-control"
+                id="exampleInputPassword1"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-primary w-100">
+              Login
+            </button>
+            <h6 className="mt-2" style={{ color: "whitesmoke" }}>
+              Don't have any account yet? <Link to={"/register"}>Register</Link>
+            </h6>
+          </form>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

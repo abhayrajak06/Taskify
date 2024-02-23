@@ -5,6 +5,8 @@ import { catList } from "../utils/cartList";
 import axios from "axios";
 import { url } from "../utils/url";
 import toast from "react-hot-toast";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const CreateTask = () => {
   const [auth, setAuth] = useAuth();
@@ -61,6 +63,7 @@ const CreateTask = () => {
   };
   return (
     <div>
+      <Navbar />
       <div className="container-fluid" style={{ minHeight: "65vh" }}>
         <div className="row">
           <div
@@ -180,6 +183,7 @@ const CreateTask = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

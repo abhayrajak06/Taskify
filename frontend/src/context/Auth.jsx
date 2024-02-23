@@ -1,4 +1,3 @@
-import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export const UserContext = createContext({});
@@ -11,7 +10,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [setAuth]);
 
   const getUser = async () => {
     try {

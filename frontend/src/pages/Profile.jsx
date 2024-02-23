@@ -1,46 +1,72 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../utils/url";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/Auth";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-const Register = () => {
-  const [userDetails, setUserDetails] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const navigate = useNavigate();
-  const changeHandler = (e) => {
-    setUserDetails({
-      ...userDetails,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const handleRegister = async (e) => {
-    e.preventDefault();
+const Profile = () => {
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const user = JSON.parse(localStorage.getItem("auth"));
+  const [auth, setAuth] = useAuth();
+
+  const getUserInfo = async () => {
     try {
-      const name = userDetails.name;
-      const email = userDetails.email;
-      const password = userDetails.password;
-      const res = await axios.post(`${url}/api/v1/auth/register`, {
-        name,
-        email,
-        password,
-      });
-      if (res?.data) {
-        toast.success("Register Successfully");
-        navigate("/login");
+      if (user?._id && user?.token) {
+        const res = await axios.get(
+          `${url}/api/v1/user/my-details/${user?._id}`,
+          {
+            headers: {
+              Authorization: user?.token,
+            },
+          }
+        );
+        setName(res?.data?.name);
+        setEmail(res?.data?.email);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    getUserInfo();
+  }, [user?._id]);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(
+        `${url}/api/v1/user/update-details/${user?._id}`,
+        {
+          name: name,
+          password: password,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        },
+        { withCredentials: true }
+      );
+      if (res?.data) {
+        const updatedUser = { ...user, name: name };
+        localStorage.setItem("auth", JSON.stringify(updatedUser));
+        setAuth(updatedUser);
+        toast.success("Profile updated successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="">
       <Navbar />
+
       <div
         className="d-flex align-items-center justify-content-center"
         style={{ minHeight: "70vh" }}
@@ -54,9 +80,9 @@ const Register = () => {
           }}
         >
           <h2 className="text-center mb-2" style={{ color: "whitesmoke" }}>
-            Register
+            Profile
           </h2>
-          <form className="" onSubmit={handleRegister}>
+          <form className="" onSubmit={handleUpdate}>
             <div className="mb-3">
               <label
                 htmlFor="exampleInputName"
@@ -67,13 +93,11 @@ const Register = () => {
               </label>
               <input
                 type="text"
-                name="name"
-                value={userDetails.name}
-                onChange={changeHandler}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="form-control"
                 id="exampleInputName"
                 placeholder="Enter your name"
-                required
               />
             </div>
             <div className="mb-3">
@@ -86,14 +110,14 @@ const Register = () => {
               </label>
               <input
                 type="email"
-                name="email"
-                value={userDetails.email}
-                onChange={changeHandler}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 placeholder="Enter your email"
                 required
+                disabled
               />
             </div>
             <div className="mb-3">
@@ -106,21 +130,16 @@ const Register = () => {
               </label>
               <input
                 type="password"
-                name="password"
-                value={userDetails.password}
-                onChange={changeHandler}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="form-control"
                 id="exampleInputPassword1"
                 placeholder="Enter your password"
-                required
               />
             </div>
             <button type="submit" className="btn btn-primary w-100">
-              Register
+              Update Profile
             </button>
-            <h6 className="mt-2" style={{ color: "whitesmoke" }}>
-              Already have an accout ? <Link to={"/login"}>Login</Link>
-            </h6>
           </form>
         </div>
       </div>
@@ -129,4 +148,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Profile;

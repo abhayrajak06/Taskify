@@ -1,20 +1,30 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/Auth";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [auth, setAuth] = useAuth();
+  const user = JSON.parse(localStorage.getItem("auth"));
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, []);
+
+  // Function to handle Navbar toggling
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
 
+  // Function to handle logout
   const handleLogout = () => {
     localStorage.removeItem("auth");
     setAuth(null);
     setIsNavOpen(false);
   };
+
+  // Function to close the Navbar
   const closeNav = () => {
     setIsNavOpen(false);
   };
@@ -71,13 +81,13 @@ const Navbar = () => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      username
+                      {auth?.name}
                     </Link>
                     <ul className="dropdown-menu">
                       <li>
                         <NavLink
                           className="dropdown-item"
-                          to={"/my-profile"}
+                          to={`/my-profile/${auth?._id}`}
                           onClick={closeNav}
                         >
                           Profile
@@ -97,48 +107,46 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <ul className="d-flex navbar-nav flex-row">
-                    <li className="nav-item">
-                      <NavLink
-                        className={"nav-link"}
-                        style={{
-                          textDecoration: "none",
-                          backgroundColor: "#070F2B",
-                          fontWeight: "bold",
-                          padding: "0.6rem",
-                          margin: "0.6rem",
-                          borderRadius: "0.4rem",
-                          color: "whitesmoke",
-                          width: "5rem",
-                          textAlign: "center",
-                        }}
-                        to={"/login"}
-                        onClick={closeNav}
-                      >
-                        Login
-                      </NavLink>
-                    </li>
-                    <li className="nav-item">
-                      <NavLink
-                        className={"nav-link"}
-                        style={{
-                          textDecoration: "none",
-                          backgroundColor: "#070F2B",
-                          fontWeight: "bold",
-                          padding: "0.6rem",
-                          margin: "0.6rem",
-                          borderRadius: "0.4rem",
-                          color: "whitesmoke",
-                          width: "5rem",
-                          textAlign: "center",
-                        }}
-                        to={"/register"}
-                        onClick={closeNav}
-                      >
-                        Register
-                      </NavLink>
-                    </li>
-                  </ul>
+                  <li className="nav-item">
+                    <NavLink
+                      className={"nav-link"}
+                      style={{
+                        textDecoration: "none",
+                        backgroundColor: "#070F2B",
+                        fontWeight: "bold",
+                        padding: "0.6rem",
+                        margin: "0.6rem",
+                        borderRadius: "0.4rem",
+                        color: "whitesmoke",
+                        width: "5rem",
+                        textAlign: "center",
+                      }}
+                      to={"/login"}
+                      onClick={closeNav}
+                    >
+                      Login
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className={"nav-link"}
+                      style={{
+                        textDecoration: "none",
+                        backgroundColor: "#070F2B",
+                        fontWeight: "bold",
+                        padding: "0.6rem",
+                        margin: "0.6rem",
+                        borderRadius: "0.4rem",
+                        color: "whitesmoke",
+                        width: "5rem",
+                        textAlign: "center",
+                      }}
+                      to={"/register"}
+                      onClick={closeNav}
+                    >
+                      Register
+                    </NavLink>
+                  </li>
                 </>
               )}
             </ul>

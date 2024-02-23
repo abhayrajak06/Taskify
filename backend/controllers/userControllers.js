@@ -1,5 +1,5 @@
+import { hashPassword } from "../helpers/authHelper.js";
 import userModel from "../models/userModel.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const getUserController = async (req, res) => {
   try {
@@ -15,36 +15,16 @@ export const getUserController = async (req, res) => {
 
 export const updateUserController = async (req, res) => {
   try {
+    if (req.body.password) {
+      req.body.password = await hashPassword(req.body.password);
+    }
     const updatedUser = await userModel.findByIdAndUpdate(
       req.params.uId,
       { $set: req.body },
       { new: true }
     );
-    res.status(200).json({
-      name: updatedUser.name,
-    });
+    res.status(200).json(updatedUser);
   } catch (error) {
-    console.log(error);
-  }
-};
-
-export const uploadImageController = async (req, res) => {
-  try {
-    const result = await uploadOnCloudinary(req.files.image.path);
-    const imageUrl = result.secure_url;
-
-    const token = req.headers.authorization;
-    const userId = token._id;
-
-    const user = await userModel.findByIdAndUpdate(
-      userId,
-      { photo: imageUrl },
-      { new: true }
-    );
-
-    res.json({ url: imageUrl });
-  } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };

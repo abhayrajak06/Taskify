@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { IoAddOutline } from "react-icons/io5";
-import { useAuth } from "../context/Auth";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { url } from "../utils/url";
+import { useAuth } from "../context/Auth";
 import { MdDeleteForever } from "react-icons/md";
-import toast from "react-hot-toast";
+import { IoAddOutline } from "react-icons/io5";
 import { FaBucket } from "react-icons/fa6";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-const Tasks = () => {
-  const [auth, setAuth] = useAuth();
-  const [tasks, setTasks] = useState([]);
+const CategoryTask = () => {
+  const { cName } = useParams();
+  const [auth] = useAuth();
   const navigate = useNavigate();
   const user = localStorage.getItem("auth");
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     if (!user) {
@@ -60,14 +60,16 @@ const Tasks = () => {
     }
   };
 
+  const catTask = tasks.filter((task) => task.category === cName);
+
   return (
     <div className="">
       <Navbar />
       <div className="container mt-2" style={{ minHeight: "68vh" }}>
-        <div className="row  justify-content-center">
+        <div className="row justify-content-center">
           <div className="col-md-10 d-flex flex-wrap gap-3 justify-content-center">
-            {tasks.length > 0 ? (
-              tasks?.map((t) => (
+            {catTask.length > 0 ? (
+              catTask.map((t) => (
                 <div className="card-container" key={t?._id}>
                   <Link
                     style={{ textDecoration: "none" }}
@@ -132,4 +134,4 @@ const Tasks = () => {
   );
 };
 
-export default Tasks;
+export default CategoryTask;
