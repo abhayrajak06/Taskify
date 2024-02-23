@@ -18,7 +18,7 @@ const CategoryTask = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+      // navigate("/login");
     } else {
       getAllTasks();
     }
