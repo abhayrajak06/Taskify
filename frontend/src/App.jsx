@@ -15,7 +15,6 @@ import CategoryTask from "./pages/CategoryTask";
 function App() {
   return (
     <>
-      {/* <Navbar /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
@@ -29,7 +28,6 @@ function App() {
         <Route path="/categories/:cName" element={<CategoryTask />} />
       </Routes>
       <Toaster />
-      {/* <Footer /> */}
     </>
   );
 }
