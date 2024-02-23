@@ -5,12 +5,7 @@ import { useAuth } from "../context/Auth";
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [auth, setAuth] = useAuth();
-  const user = JSON.parse(localStorage.getItem("auth"));
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) navigate("/login");
-  }, []);
 
   // Function to handle Navbar toggling
   const handleNavToggle = () => {

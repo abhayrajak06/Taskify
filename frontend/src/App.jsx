@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/login" element={<Login />} />
         <Route path="/all-tasks" element={<Tasks />} />
         <Route path="/*" element={<PageNotFound />} />
         <Route path="/create-task" element={<CreateTask />} />
