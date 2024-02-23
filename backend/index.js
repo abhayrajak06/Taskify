@@ -6,14 +6,20 @@ import authRoutes from "./routes/authRoutes.js";
 import todoRoutes from "./routes/todoRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
+const app = express();
+app.use(
+  cors({
+    origin: "https://taskify-abhay.vercel.app",
+    credentials: true,
+  })
+);
+
 //config env
 dotenv.config();
 
 //config database
 connectDB();
 
-const app = express();
-app.use(cors());
 app.use(express.json());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/todo", todoRoutes);
